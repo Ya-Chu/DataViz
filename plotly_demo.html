@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.24.2/plotly.min.js"></script>
+    <title>用電量視覺化</title>
+</head>
+
+<body>
+
+        <!-- 折線圖開始 -->
+            <div id="divPlot">
+                    <script>
+                        var y1 = [];
+                        var y2 = [];
+                        var y3 = [];
+                        var y4 = [];
+                        var y5 = [];
+                        function dataGenerator(arrName){
+                            for (let i = 0; i < 365; i++) {
+                            let randomNumber = Math.floor(Math.random() * 100); // 在 0 到 99 之間產生隨機整數
+                            arrName.push(randomNumber);
+                            } 
+                            console.log(arrName)
+                        }
+                        dataGenerator(y1);
+                        dataGenerator(y2);
+                        dataGenerator(y3);
+                        dataGenerator(y4);
+                        dataGenerator(y5);
+
+                        var dates = [];
+                        var startDate = new Date('1/1');
+                        for (var i = 0; i < 365; i++) {
+                        var currentDate = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
+                        var dateString = (currentDate.getMonth() + 1) + '/' + currentDate.getDate();
+                        dates.push(dateString);
+                        }
+                        var trace1 = {
+                            type: "scatter",
+                            mode: "lines",
+                            name: 'Device A',
+                            fill: 'tonexty',
+                            x: dates,
+                            y: y1,
+                        }
+
+                        var trace2 = {
+                            type: "scatter",
+                            mode: "lines",
+                            name: 'Device B',
+                            fill: 'tonexty',
+                            x: dates,
+                            y: y2,
+                        }
+
+                        var trace3 = {
+                            type: "scatter",
+                            mode: "lines",
+                            name: 'Device C',
+                            fill: 'tonexty',
+                            x: dates,
+                            y: y3,
+                        }
+
+                        var trace4 = {
+                            type: "scatter",
+                            mode: "lines",
+                            name: 'Device D',
+                            fill: 'tonexty',
+                            x: dates,
+                            y: y4,
+                        }
+
+                        var trace5 = {
+                            type: "scatter",
+                            mode: "lines",
+                            name: 'Device E',
+                            fill: 'tonexty',
+                            x: dates,
+                            y: y5,
+                        }
+
+                        var data = [trace1,trace2,trace3,trace4,trace5];
+                        console.log(data);    
+                        var layout ={
+                            title:'能耗表',
+                            yaxis:{title: '度'},
+                            showlegend: true,
+                            autosize: true
+                        }
+                        var config = {responsive: true};
+                        Plotly.newPlot('divPlot', data, layout, config);  
+                    </script>
+            </div>
+        <!-- 折線圖結束 -->
+
+
+        <!-- 組別長條圖開始 -->
+        <div id="divBar">
+                <script>  
+                    var xValue = ['一月', '二月', '三月','四月', '五月', '六月','七月', '八月', '九月','十月','十一月','十二月']; 
+                    var bar_y1 = [20, 14, 16, 12, 18, 29, 3, 10, 98, 73, 34, 2];
+                    var bar_y2 = [12, 18, 29, 20, 14, 16, 12, 18, 29, 3, 10, 98, 73];
+                    var percentage = [];
+                    for (var i = 0; i < bar_y1.length; i++) {
+                            const p = Math.round((bar_y2[i]-bar_y1[i])/(bar_y1[i]+bar_y2[i])*100);
+                            percentage.push(p);
+                        };
+                    var trace1 = {
+                        x: xValue,
+                        y: bar_y1,                                           
+                        name: '2022年',
+                        type: 'bar',
+                        };
+                        
+                        var trace2 = {
+                        x: xValue,
+                        y: bar_y2,
+                        name: '2023年',
+                        type: 'bar',
+                        };
+
+                        var trace3 = {
+                        x: xValue,
+                        y: [0,0,0,0,0,0,0,0,0,0,0,0],
+                        name: '年增',
+                        type: 'bar',
+                        base: percentage,
+                        hovertemplate: "年增率：<b>%{base}%</b><extra></extra>",
+                        };
+                                                                
+                    var data = [trace1, trace2, trace3];
+                    var layout = {title:'年度耗能比較', barmode: 'group', hovermode: 'x unified',
+                                    yaxis: {title: '度',rangemode: 'nonnegative',autorange: true}
+                                };
+                    var config = {responsive: true};
+                    Plotly.newPlot('divBar', data, layout, config);  
+                </script>
+        </div>
+        <!-- 組別長條圖結束 -->
+
+        <!-- 折線長條圖開始-->
+            <div id="divAccumlate">
+                    <script>  
+                        var trace1 = {
+                            x: dates,
+                            y: y1,                                           
+                            name: '2022年',
+                            type: 'bar'
+                        };
+                        var trace2 = {
+                            type: "scatter",
+                            mode: "lines+markers",
+                            name: '2022年',
+                            x: dates,
+                            y: y1
+                        };                                                                                   
+                        var data = [trace1,trace2];
+                        var layout = {title:'每日累積能耗',
+                                        yaxis: {title: '度',rangemode: 'nonnegative',autorange: true}
+                                    };
+                        var config = {responsive: true};
+                        Plotly.newPlot('divAccumlate', data, layout, config);  
+                    </script>
+            </div>
+        <!-- 折線長條圖結束-->
+</body>
+</html>
